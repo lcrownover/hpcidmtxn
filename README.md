@@ -40,3 +40,8 @@ To make it run on boot:
 ```bash
 systemctl enable hpcidmtxn
 ```
+
+## NGINX Reverse Proxy
+
+If you want to use NGINX to serve this tool, there's a simple proxy config in the `nginx` directory.
+Change `HOSTNAME` to the server name of your choosing, and store at `/etc/nginx/conf.d/proxy.conf`.
