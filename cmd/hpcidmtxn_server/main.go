@@ -33,7 +33,7 @@ func main() {
 
 		uid, err := GetLocalUIDFromUsername(name)
 		if err != nil {
-			c.String(http.StatusNotFound, "%s", err)
+			c.String(http.StatusNotFound, "%s", "not found")
 		}
 
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", uid))
