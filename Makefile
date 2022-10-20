@@ -9,7 +9,11 @@ client:
 install: install_server install_client
 
 install_server:
-	cp -r bin/hpcidmtxn_server /usr/local/bin/
+	cp bin/hpcidmtxn_server /usr/local/bin/
 
 install_client:
-	cp -r bin/hpcidmtxn_client /usr/local/bin/
+	cp bin/hpcidmtxn_client /usr/local/bin/
+
+clean:
+	rm -f /usr/local/bin/hpcidmtxn_client
+	rm -f /usr/local/bin/hpcidmtxn_server
