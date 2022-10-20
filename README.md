@@ -1,5 +1,14 @@
 # hpcidmtxn
 
+The HPC IDM Transaction tool is a temporary piece of software to facilitate attribute migrations.
+The server should run on a system that authenticates against the target IDM solution, while the client should run on a system that authenticates against the current IDM solution.
+
+TODO:
+
+- Actual error handling on the server instead of dying
+
+- Implement the chown func on the client
+
 ## Installation
 
 Building both client and server:
