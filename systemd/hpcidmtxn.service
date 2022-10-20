@@ -1,0 +1,12 @@
+[Unit]
+Description=HPC IDM Transaction Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+User=hpcidmtxn
+ExecStart=/usr/local/bin/hpcidmtxn_server
+
+[Install]
+WantedBy=multi-user.target
