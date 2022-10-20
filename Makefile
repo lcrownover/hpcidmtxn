@@ -13,8 +13,3 @@ install_server:
 
 install_client:
 	cp bin/hpcidmtxn_client /usr/local/bin/
-
-scp:
-	scp bin/hpcidmtxn_* is-hpc-idm-txn:~/bin
-
-transfer: all scp
