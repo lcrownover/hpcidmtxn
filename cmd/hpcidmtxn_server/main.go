@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func main() {
 
 		uid := shared.GetUIDFromUsername(name)
 
-		c.String(http.StatusOK, "%s", uid)
+		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", uid))
 	})
 
 	router.Run(":8080")

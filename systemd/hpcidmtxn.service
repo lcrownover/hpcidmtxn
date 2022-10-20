@@ -3,6 +3,7 @@ Description=HPC IDM Transaction Service
 After=network.target
 
 [Service]
+Environment=GIN_MODE=release
 Type=simple
 Restart=always
 User=hpcidmtxn
