@@ -45,3 +45,4 @@ systemctl enable hpcidmtxn
 
 If you want to use NGINX to serve this tool, there's a simple proxy config in the `nginx` directory.
 Change `HOSTNAME` to the server name of your choosing, and store at `/etc/nginx/conf.d/proxy.conf`.
+Remove any of the default server configuration if you're keeping the `/` location.
