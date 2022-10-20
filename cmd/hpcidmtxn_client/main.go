@@ -17,16 +17,16 @@ func GetRemoteUIDFromUsername(username string, serverName string) int {
 	url := fmt.Sprintf("http://%s/user/%s", serverName, username)
 	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal("error making request to: %s", url)
+		log.Fatalln("error making request to: ", url)
 	}
 	uid, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal("error reading response body")
+		log.Fatalln("error reading response body")
 	}
 	uidString := strings.TrimSpace(string(uid))
 	uidInt, err := strconv.Atoi(uidString)
 	if err != nil {
-		log.Fatal("error converting uid string to int")
+		log.Fatalln("error converting uid string to int")
 	}
 	return uidInt
 }
@@ -56,7 +56,7 @@ func GetUsersInPirg(pirgName string, serverName string) []User {
 	csus := splitCmd[len(splitCmd)-1]
 	csul := strings.Split(csus, ",")
 	for _, username := range csul {
-		uid := shared.GetUIDFromUsername(username, serverName)
+		uid := GetRemoteUIDFromUsername(username, serverName)
 		u := User{Name: username, Pirg: pirgName, Uid: uid}
 		if !u.IsPopulated() {
 			log.Fatalln("Unable to get populate user: ", u)
@@ -88,7 +88,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	userList := GetUsersInPirg(*pirgName)
+	userList := GetUsersInPirg(*pirgName, *serverName)
 
 	var wg sync.WaitGroup
 
