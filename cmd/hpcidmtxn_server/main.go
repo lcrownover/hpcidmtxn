@@ -31,7 +31,7 @@ func main() {
 	router.GET("/user/:name", func(c *gin.Context) {
 		name := c.Param("name")
 
-		uid := shared.GetLocalUIDFromUsername(name)
+		uid := GetLocalUIDFromUsername(name)
 
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", uid))
 	})
