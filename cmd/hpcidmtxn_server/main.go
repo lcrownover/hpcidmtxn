@@ -25,6 +25,16 @@ func GetLocalUIDFromUsername(username string) (int, error) {
 	return uid, nil
 }
 
+func GetLocalUsernameFromUID(uid int) (string, error) {
+	cmd := exec.Command("id", "-nu", fmt.Sprint(uid))
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+	username := strings.TrimSpace(string(out))
+	return username, nil
+}
+
 func main() {
 	router := gin.Default()
 
@@ -37,6 +47,21 @@ func main() {
 		}
 
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", uid))
+	})
+
+	router.GET("/uid/:uid", func(c *gin.Context) {
+		param_uid := c.Param("uid")
+		uid, err := strconv.Atoi(param_uid)
+		if err != nil {
+			c.String(http.StatusBadRequest, "invalid integer: %s", fmt.Sprintf("%d", uid))
+		}
+
+		username, err := GetLocalUsernameFromUID(uid)
+		if err != nil {
+			c.String(http.StatusNotFound, "not found")
+		}
+
+		c.String(http.StatusOK, "%s", username)
 	})
 
 	router.Run(":8080")
