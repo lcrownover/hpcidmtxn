@@ -19,6 +19,7 @@ func GetADUIDFromUsername(username string) (*int, error) {
 		return nil, err
 	}
 	trimmedOut := strings.TrimSpace(string(out))
+	log.Printf("trimmedOut: %s", trimmedOut)
 	uid, err := strconv.Atoi(strings.Split(trimmedOut, ":")[2])
 	if err != nil {
 		log.Fatal(err)
