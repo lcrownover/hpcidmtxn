@@ -54,7 +54,7 @@ func loadT1IdMap(path string) (map[string]int, error) {
 	t1Usermap := make(map[string]int)
 	body, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		log.Fatalf("Error reading file '%s': %v", path, err)
 	}
 	for _, line := range strings.Split(string(body), "\n") {
 		splitLine := strings.Split(line, ",")
