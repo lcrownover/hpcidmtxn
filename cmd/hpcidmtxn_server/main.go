@@ -61,7 +61,6 @@ func loadT1IdMap(path string) (map[string]int, error) {
 			continue
 		}
 		splitLine := strings.Split(line, ",")
-		log.Printf("Line: %s", line)
 		id, err := strconv.Atoi(splitLine[1])
 		if err != nil {
 			log.Fatalf("Error parsing line '%s': %v", line, err)
