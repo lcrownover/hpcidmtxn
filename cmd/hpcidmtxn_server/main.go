@@ -57,6 +57,9 @@ func loadT1IdMap(path string) (map[string]int, error) {
 		log.Fatalf("Error reading file '%s': %v", path, err)
 	}
 	for _, line := range strings.Split(string(body), "\n") {
+		if len(line) == 0 {
+			continue
+		}
 		splitLine := strings.Split(line, ",")
 		log.Printf("Line: %s", line)
 		id, err := strconv.Atoi(splitLine[1])
