@@ -13,13 +13,13 @@ import (
 )
 
 func GetADUIDFromUsername(username string) (*int, error) {
-	cmd := exec.Command("id", "-u", username)
+	cmd := exec.Command("getent", "passwd", username)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, err
 	}
 	trimmedOut := strings.TrimSpace(string(out))
-	uid, err := strconv.Atoi(trimmedOut)
+	uid, err := strconv.Atoi(strings.Split(trimmedOut, ":")[2])
 	if err != nil {
 		log.Fatal(err)
 	}
