@@ -12,44 +12,42 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetADUIDFromUsername(username string) (*int, error) {
+func GetADUIDFromUsername(username string) (int, error) {
 	cmd := exec.Command("getent", "passwd", username)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	trimmedOut := strings.TrimSpace(string(out))
-	log.Printf("trimmedOut: %s", trimmedOut)
-	log.Printf("split: %s", strings.Split(trimmedOut, ":")[2])
 	uid, err := strconv.Atoi(strings.Split(trimmedOut, ":")[2])
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &uid, nil
+	return uid, nil
 }
 
-func GetADGIDFromGroupname(groupname string) (*int, error) {
+func GetADGIDFromGroupname(groupname string) (int, error) {
 	cmd := exec.Command("getent", "group", groupname)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	trimmedOut := strings.TrimSpace(string(out))
 	gid, err := strconv.Atoi(strings.Split(trimmedOut, ":")[2])
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &gid, nil
+	return gid, nil
 }
 
-func GetADUsernameFromUID(uid int) (*string, error) {
+func GetADUsernameFromUID(uid int) (string, error) {
 	cmd := exec.Command("id", "-nu", fmt.Sprint(uid))
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	username := strings.TrimSpace(string(out))
-	return &username, nil
+	return username, nil
 }
 
 func loadT1IdMap(path string) (map[string]int, error) {
@@ -110,7 +108,7 @@ func main() {
 		name := c.Param("name")
 
 		uid, err := GetADUIDFromUsername(name)
-		if err != nil {
+		if uid == 0 || err != nil {
 			c.String(http.StatusNotFound, "%s", "not found")
 		}
 
@@ -135,12 +133,12 @@ func main() {
 	router.GET("/t2/group/:name", func(c *gin.Context) {
 		name := c.Param("name")
 
-		uid, err := GetADGIDFromGroupname(name)
-		if err != nil {
+		gid, err := GetADGIDFromGroupname(name)
+		if gid == 0 || err != nil {
 			c.String(http.StatusNotFound, "%s", "not found")
 		}
 
-		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", uid))
+		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gid))
 	})
 
 	router.Run(":8080")
