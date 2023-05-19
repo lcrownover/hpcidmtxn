@@ -147,7 +147,7 @@ func main() {
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gid))
 	})
 
-	router.POST("/t1/groupmemberships", func(c *gin.Context) {
+	router.POST("/t1/groupmemberships/", func(c *gin.Context) {
 		// upload file
 		file, err := c.FormFile("file")
 		if err != nil {
