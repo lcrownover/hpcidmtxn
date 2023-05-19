@@ -148,8 +148,13 @@ func main() {
 
 	router.GET("/t2/groups", func(c *gin.Context) {
 		gm, err := GetGroupMemberships()
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "failed to load group memberships",
+			})
+		}
 
-		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gm))
+		c.String(http.StatusOK, "%s", fmt.Sprintf("%s", gm))
 	})
 
 	router.GET("/t2/group/:name", func(c *gin.Context) {
