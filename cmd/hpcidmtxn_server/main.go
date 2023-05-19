@@ -147,10 +147,9 @@ func main() {
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gid))
 	})
 
-	router.PUT("/t2/groupmemberships", func(c *gin.Context) {
+	router.POST("/t1/groupmemberships", func(c *gin.Context) {
 		// upload file
 		file, err := c.FormFile("file")
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": "no file uploaded",
@@ -168,10 +167,9 @@ func main() {
 		})
 	})
 
-	router.PUT("/t2/groups", func(c *gin.Context) {
+	router.POST("/t1/groups", func(c *gin.Context) {
 		// upload file
 		file, err := c.FormFile("file")
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": "no file uploaded",
@@ -189,10 +187,9 @@ func main() {
 		})
 	})
 
-	router.PUT("/t2/users", func(c *gin.Context) {
+	router.POST("/t1/users", func(c *gin.Context) {
 		// upload file
 		file, err := c.FormFile("file")
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": "no file uploaded",
