@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -248,7 +249,13 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
 		pirgName := input.Pirg
-		err := os.WriteFile("/etc/hpcidmtxn/data/"+pirgName+".json", []byte(fmt.Sprintf("%v", input)), 0644)
+		file, err := json.MarshalIndent(input, "", " ")
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("failed to marshal json"),
+			})
+		}
+		err = ioutil.WriteFile("/etc/hpcidmtxn/data/"+pirgName+".json", file, 0644)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("failed to write file"),
