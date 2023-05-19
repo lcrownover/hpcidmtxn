@@ -158,7 +158,7 @@ func main() {
 			})
 		}
 
-		if err := c.SaveUploadedFile(file, "t1group-memberships.txt"); err != nil {
+		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1group-memberships.txt"); err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
 			})
