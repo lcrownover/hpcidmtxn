@@ -243,6 +243,26 @@ func main() {
 		})
 	})
 
+	router.GET("/migrationdata/:pirg", func(c *gin.Context) {
+		pirgName := c.Param("pirg")
+		var outputData MigrationData
+		jsonFile, err := os.Open(fmt.Sprintf("/etc/hpcidmtxn/data/%s.json", pirgName))
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("failed to open file"),
+			})
+		}
+		defer jsonFile.Close()
+		fileData, err := ioutil.ReadAll(jsonFile)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("failed to read file"),
+			})
+		}
+		json.Unmarshal(fileData, &outputData)
+		c.JSON(http.StatusOK, outputData)
+	})
+
 	router.POST("/migrationdata", func(c *gin.Context) {
 		var input MigrationData
 		if err := c.ShouldBindJSON(&input); err != nil {
