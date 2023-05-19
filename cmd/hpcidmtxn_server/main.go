@@ -13,6 +13,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// migrationdata:
+// {'pirg': 'hpcrcf', 't1gid': '50202', 't2gid': '50202', 'users': [{'username': 'dmajchrz', 't1uid': '2939', 't2uid': '261151'}, {'username': 'lrc', 't1uid': '2780', 't2uid': '79413'}]}
+type UserData struct {
+	Username string `json:"username"`
+	T1UID    int    `json:"t1uid"`
+	T2UID    int    `json:"t2uid"`
+}
+type MigrationData struct {
+	Pirg  string     `json:"pirg"`
+	T1GID int        `json:"t1gid"`
+	T2GID int        `json:"t2gid"`
+	Users []UserData `json:"users"`
+}
+
 func GetADUIDFromUsername(username string) (int, error) {
 	cmd := exec.Command("getent", "passwd", username)
 	out, err := cmd.CombinedOutput()
@@ -225,6 +239,23 @@ func main() {
 
 		c.JSON(http.StatusOK, gin.H{
 			"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
+		})
+	})
+
+	router.POST("/t1/migrationdata", func(c *gin.Context) {
+		var input MigrationData
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+		pirgName := input.Pirg
+		err := os.WriteFile("/etc/hpcidmtxn/data/"+pirgName+".json", []byte(fmt.Sprintf("%v", input)), 0644)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("failed to write file"),
+			})
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": "data written",
 		})
 	})
 
