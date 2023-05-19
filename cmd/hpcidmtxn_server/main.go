@@ -74,7 +74,6 @@ func main() {
 
 	router := gin.Default()
 	router.MaxMultipartMemory = 8 << 20 // 8 MiB
-	router.Static("/upload", "/etc/hpcidmtxn")
 
 	router.GET("/t1/user/:name", func(c *gin.Context) {
 		name := c.Param("name")
@@ -178,7 +177,7 @@ func main() {
 			})
 		}
 
-		if err := c.SaveUploadedFile(file, "t1groups.csv"); err != nil {
+		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1groups.csv"); err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
 			})
@@ -198,7 +197,7 @@ func main() {
 			})
 		}
 
-		if err := c.SaveUploadedFile(file, "t1users.csv"); err != nil {
+		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1users.csv"); err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
 			})
