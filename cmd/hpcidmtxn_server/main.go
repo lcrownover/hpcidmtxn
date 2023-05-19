@@ -18,13 +18,13 @@ import (
 // {'pirg': 'hpcrcf', 't1gid': '50202', 't2gid': '50202', 'users': [{'username': 'dmajchrz', 't1uid': '2939', 't2uid': '261151'}, {'username': 'lrc', 't1uid': '2780', 't2uid': '79413'}]}
 type UserData struct {
 	Username string `json:"username"`
-	T1UID    int    `json:"t1uid"`
-	T2UID    int    `json:"t2uid"`
+	T1UID    string `json:"t1uid"`
+	T2UID    string `json:"t2uid"`
 }
 type MigrationData struct {
 	Pirg  string     `json:"pirg"`
-	T1GID int        `json:"t1gid"`
-	T2GID int        `json:"t2gid"`
+	T1GID string     `json:"t1gid"`
+	T2GID string     `json:"t2gid"`
 	Users []UserData `json:"users"`
 }
 
