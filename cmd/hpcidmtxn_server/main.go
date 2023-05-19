@@ -253,13 +253,12 @@ func main() {
 			})
 		}
 		defer jsonFile.Close()
-		fileData, err := ioutil.ReadAll(jsonFile)
-		if err != nil {
+		jsonParser := json.NewDecoder(jsonFile)
+		if err = jsonParser.Decode(&outputData); err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("failed to read file"),
 			})
 		}
-		json.Unmarshal(fileData, &outputData)
 		c.JSON(http.StatusOK, outputData)
 	})
 
