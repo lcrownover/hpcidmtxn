@@ -255,7 +255,7 @@ func main() {
 				"message": fmt.Sprintf("failed to marshal json"),
 			})
 		}
-		err = ioutil.WriteFile("/etc/hpcidmtxn/data/"+pirgName+".json", file, 0644)
+		err = ioutil.WriteFile(fmt.Sprintf("/etc/hpcidmtxn/data/%s.json", pirgName), file, 0644)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("failed to write file"),
