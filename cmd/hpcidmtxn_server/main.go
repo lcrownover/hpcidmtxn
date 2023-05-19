@@ -74,7 +74,7 @@ func main() {
 
 	router := gin.Default()
 	router.MaxMultipartMemory = 8 << 20 // 8 MiB
-	router.Static("/", "/etc/hpcidmtxn")
+	router.Static("/upload", "/etc/hpcidmtxn")
 
 	router.GET("/t1/user/:name", func(c *gin.Context) {
 		name := c.Param("name")
