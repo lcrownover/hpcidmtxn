@@ -71,19 +71,18 @@ func loadT1IdMap(path string) (map[string]int, error) {
 }
 
 func main() {
-	usermap, err := loadT1IdMap("/etc/hpcidmtxn/t1users.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	groupmap, err := loadT1IdMap("/etc/hpcidmtxn/t1groups.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	router := gin.Default()
 
 	router.GET("/t1/user/:name", func(c *gin.Context) {
 		name := c.Param("name")
+
+		usermap, err := loadT1IdMap("/etc/hpcidmtxn/t1users.csv")
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "failed to load usermap",
+			})
+		}
 
 		uid, ok := usermap[name]
 		if !ok {
@@ -95,6 +94,13 @@ func main() {
 
 	router.GET("/t1/group/:name", func(c *gin.Context) {
 		name := c.Param("name")
+
+		groupmap, err := loadT1IdMap("/etc/hpcidmtxn/t1groups.csv")
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "failed to load groupmap",
+			})
+		}
 
 		gid, ok := groupmap[name]
 		if !ok {
@@ -141,7 +147,7 @@ func main() {
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gid))
 	})
 
-	router.PUT("/t2/groups", func(c *gin.Context) {
+	router.PUT("/t2/groupmemberships", func(c *gin.Context) {
 		// upload file
 		file, err := c.FormFile("file")
 
@@ -152,6 +158,48 @@ func main() {
 		}
 
 		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1group-memberships.txt"); err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
+			})
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
+		})
+	})
+
+	router.PUT("/t2/groups", func(c *gin.Context) {
+		// upload file
+		file, err := c.FormFile("file")
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "no file uploaded",
+			})
+		}
+
+		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1groups.csv"); err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
+			})
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
+		})
+	})
+
+	router.PUT("/t2/users", func(c *gin.Context) {
+		// upload file
+		file, err := c.FormFile("file")
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "no file uploaded",
+			})
+		}
+
+		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1users.csv"); err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
 			})
