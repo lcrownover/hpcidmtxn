@@ -242,7 +242,7 @@ func main() {
 		})
 	})
 
-	router.POST("/t1/migrationdata", func(c *gin.Context) {
+	router.POST("/migrationdata", func(c *gin.Context) {
 		var input MigrationData
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
