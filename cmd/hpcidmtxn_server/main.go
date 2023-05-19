@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -48,6 +49,14 @@ func GetADUsernameFromUID(uid int) (string, error) {
 	}
 	username := strings.TrimSpace(string(out))
 	return username, nil
+}
+
+func GetGroupMemberships() (string, error) {
+	data, err := os.ReadFile("/etc/hpcidmtxn/t1group-memberships.txt")
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func loadT1IdMap(path string) (map[string]int, error) {
@@ -135,6 +144,12 @@ func main() {
 		}
 
 		c.String(http.StatusOK, "%s", username)
+	})
+
+	router.GET("/t2/groups", func(c *gin.Context) {
+		gm, err := GetGroupMemberships()
+
+		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gm))
 	})
 
 	router.GET("/t2/group/:name", func(c *gin.Context) {
