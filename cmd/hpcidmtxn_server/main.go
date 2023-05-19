@@ -141,5 +141,26 @@ func main() {
 		c.String(http.StatusOK, "%s", fmt.Sprintf("%d", gid))
 	})
 
+	router.PUT("/t2/groups", func(c *gin.Context) {
+		// upload file
+		file, err := c.FormFile("file")
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "no file uploaded",
+			})
+		}
+
+		if err := c.SaveUploadedFile(file, "/etc/hpcidmtxn/t1group-memberships.txt"); err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": fmt.Sprintf("'%s' failed to upload", file.Filename),
+			})
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
+		})
+	})
+
 	router.Run(":8080")
 }
