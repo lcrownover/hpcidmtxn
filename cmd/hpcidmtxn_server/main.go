@@ -245,12 +245,12 @@ func main() {
 
 	router.GET("/migrationdata/:pirg", func(c *gin.Context) {
 		pirgName := c.Param("pirg")
-        filePath := fmt.Sprintf("/etc/hpcidmtxn/data/%s.json", pirgName)
-        if _, err := os.Stat(filePath); err != nil {
-            c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-                "message": fmt.Sprintf("pirg '%s' not found in migration data", pirgName),
-            })
-        }
+		filePath := fmt.Sprintf("/etc/hpcidmtxn/data/%s.json", pirgName)
+		if _, err := os.Stat(filePath); err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"message": fmt.Sprintf("pirg '%s' not found in migration data", pirgName),
+			})
+		}
 		var outputData MigrationData
 		jsonFile, err := os.Open(fmt.Sprintf("/etc/hpcidmtxn/data/%s.json", pirgName))
 		if err != nil {
